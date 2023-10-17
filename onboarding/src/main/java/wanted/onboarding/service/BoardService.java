@@ -40,4 +40,11 @@ public class BoardService {
     public void remove(Board board) {
         boardRepository.remove(board);
     }
+
+    /**
+     * findSearchAll
+     */
+    public List<Board> findSearchAll(String search) {
+        return boardRepository.findSearchAll(search);
+    }
 }

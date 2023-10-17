@@ -54,4 +54,13 @@ public class BoardApiController {
         List<Board> boards = boardService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(boards);
     }
+
+    /**
+     * 공고 검색 조회
+     */
+    @GetMapping("/{search}")
+    public ResponseEntity<List<Board>> findSearchBoards(@PathVariable String search) {
+        List<Board> boards = boardService.findSearchAll(search);
+        return ResponseEntity.status(HttpStatus.OK).body(boards);
+    }
 }

@@ -28,4 +28,16 @@ public class BoardRepository {
                 .getResultList();
     }
     public void remove(Board board) {em.remove(board);}
+
+    /**
+     * findSearchAll
+     */
+    public List<Board> findSearchAll(String search){
+        return em.createQuery("select b from Board b " +
+                        "where b.position like concat('%',:search,'%') " +
+                        "or b.content like concat('%',:search,'%') " +
+                        "or b.skill like concat('%',:search,'%')", Board.class)
+                .setParameter("search", search)
+                .getResultList();
+    }
 }
