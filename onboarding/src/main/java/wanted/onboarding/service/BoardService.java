@@ -3,7 +3,7 @@ package wanted.onboarding.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import wanted.onboarding.api.BoardUpdateDto;
+import wanted.onboarding.api.BoardDto;
 import wanted.onboarding.domain.Board;
 import wanted.onboarding.repository.BoardRepository;
 
@@ -29,13 +29,14 @@ public class BoardService {
      * update
      */
     @Transactional // 쓰기모드
-    public Board update(Board board, BoardUpdateDto dto) {
+    public Board update(Board board, BoardDto dto) {
         board.update(dto); // dirty checking
         return board;
     }
     /**
      * remove
      */
+    @Transactional // 쓰기모드
     public void remove(Board board) {
         boardRepository.remove(board);
     }

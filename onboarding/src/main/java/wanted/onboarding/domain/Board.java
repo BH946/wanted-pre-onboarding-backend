@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
-import wanted.onboarding.api.BoardUpdateDto;
+import wanted.onboarding.api.BoardDto;
 
 @Entity
 @Getter @Setter
@@ -20,7 +20,7 @@ public class Board {
     private String skill; // 사용기술
 
     ///편의 메서드==//
-    public Board update(BoardUpdateDto dto) {
+    public Board update(BoardDto dto) {
         this.position = dto.getPosition();
         this.reward = dto.getReward();
         this.content = dto.getContent();

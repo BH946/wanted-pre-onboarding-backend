@@ -6,12 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import wanted.onboarding.api.BoardUpdateDto;
+import wanted.onboarding.api.BoardDto;
 import wanted.onboarding.domain.Board;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -39,7 +37,7 @@ class BoardServiceTest {
         boardService.join(board);
         Board findBoard = boardService.findOne(board.getId());
         // when
-        BoardUpdateDto dto = new BoardUpdateDto("백엔드 주니어 개발자", 1500000l,"원티드랩에서 백엔드 주니어 개발자를 '적극' 채용합니다. 자격요건은..", "Python");
+        BoardDto dto = new BoardDto("백엔드 주니어 개발자", 1500000l,"원티드랩에서 백엔드 주니어 개발자를 '적극' 채용합니다. 자격요건은..", "Python");
         log.debug("findBoard.id : {}, findBoard.reward : {}", findBoard.getId(), findBoard.getReward());
         Long prevData = findBoard.getReward();
         boardService.update(board, dto);
