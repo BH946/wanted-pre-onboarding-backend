@@ -1,12 +1,15 @@
 package wanted.onboarding.api;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wanted.onboarding.domain.Board;
+import wanted.onboarding.domain.BoardApply;
+import wanted.onboarding.service.BoardApplyService;
 import wanted.onboarding.service.BoardService;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.List;
 @RequestMapping("api/v1/boards")
 public class BoardApiController {
     private final BoardService boardService;
+    private final BoardApplyService boardApplyService;
 
     /**
      * 공고 등록
@@ -68,13 +72,30 @@ public class BoardApiController {
      * 채용 상세 페이지 조회
      */
     @GetMapping("/{boardId}")
-    public ResponseEntity<BoardDtoRes> findSearchBoards(@PathVariable Long boardId) {
+    public ResponseEntity<BoardDtoRes> findBoardDetail(@PathVariable Long boardId) {
         Board board = boardService.findOne(boardId);
         List<Long> idList = boardService.findIdList();
         BoardDtoRes result = new BoardDtoRes(board, idList);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * 사용자의 채용공고 지원 요청
+     */
+    @PostMapping("/apply")
+    public ResponseEntity<String> applyBoard(@RequestBody BoardApplyDto dto) {
+        log.debug("apply 입장");
+        List<BoardApply> findBoardApply = boardApplyService.findUserOne(dto.userId);
+        if(!findBoardApply.isEmpty()) return null;
+        BoardApply boardApply = new BoardApply();
+        boardApply.setBoardId(dto.boardId);
+        boardApply.setUserId(dto.userId);
+        boardApplyService.join(boardApply);
+        return ResponseEntity.status(HttpStatus.CREATED).body("신청이 완료되었습니다.");
+    }
+
+
+    // DTO
     @Getter
     static class BoardDtoRes {
         private Long id; // pk
@@ -90,6 +111,16 @@ public class BoardApiController {
             content = board.getContent();
             skill = board.getSkill();
             this.idList = idList;
+        }
+    }
+    @Getter
+    @NoArgsConstructor
+    static class BoardApplyDto {
+        private Long boardId;
+        private Long userId;
+        public BoardApplyDto(Long boardId, Long userId) {
+            this.boardId = boardId;
+            this.userId = userId;
         }
     }
 }
