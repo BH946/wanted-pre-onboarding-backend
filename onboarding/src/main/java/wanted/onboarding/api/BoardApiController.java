@@ -1,5 +1,6 @@
 package wanted.onboarding.api;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -58,9 +59,37 @@ public class BoardApiController {
     /**
      * 공고 검색 조회
      */
-    @GetMapping("/{search}")
+    @GetMapping("/search/{search}")
     public ResponseEntity<List<Board>> findSearchBoards(@PathVariable String search) {
         List<Board> boards = boardService.findSearchAll(search);
         return ResponseEntity.status(HttpStatus.OK).body(boards);
+    }
+    /**
+     * 채용 상세 페이지 조회
+     */
+    @GetMapping("/{boardId}")
+    public ResponseEntity<BoardDtoRes> findSearchBoards(@PathVariable Long boardId) {
+        Board board = boardService.findOne(boardId);
+        List<Long> idList = boardService.findIdList();
+        BoardDtoRes result = new BoardDtoRes(board, idList);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @Getter
+    static class BoardDtoRes {
+        private Long id; // pk
+        private String position; // 채용포지션
+        private Long reward; // 채용보상금
+        private String content; // 채용내용
+        private String skill; // 사용기술
+        private List<Long> idList; // 회사가올린다른채용공고
+        public BoardDtoRes(Board board, List<Long> idList) {
+            id = board.getId();
+            position = board.getPosition();
+            reward = board.getReward();
+            content = board.getContent();
+            skill = board.getSkill();
+            this.idList = idList;
+        }
     }
 }

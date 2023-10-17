@@ -40,4 +40,12 @@ public class BoardRepository {
                 .setParameter("search", search)
                 .getResultList();
     }
+
+    /**
+     * findIdList
+     */
+    public List<Long> findIdList() {
+        return em.createQuery("select b.id from Board b ", Long.class)
+                .getResultList();
+    }
 }

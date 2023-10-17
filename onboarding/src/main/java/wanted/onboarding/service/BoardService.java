@@ -47,4 +47,10 @@ public class BoardService {
     public List<Board> findSearchAll(String search) {
         return boardRepository.findSearchAll(search);
     }
+    /**
+     * findIdList
+     */
+    public List<Long> findIdList() {
+        return boardRepository.findIdList();
+    }
 }
